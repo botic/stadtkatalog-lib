@@ -116,7 +116,7 @@ export interface Asset {
     master: string;
     versions: {
         [propName: string]: string;
-    }
+    };
 }
 
 export interface Entry {
@@ -126,4 +126,38 @@ export interface Entry {
     created: string;
     modified: string;
     data: EntryData;
+}
+
+export interface GeoFencePoint {
+    latitude: number;
+    longitude: number;
+}
+
+export enum SortField {
+    id = "id",
+    created = "created",
+    modified = "modified",
+    name = "name",
+    relevance = "relevance",
+    distance = "distance",
+}
+
+export enum SortOrder {
+    asc = "asc",
+    desc = "desc",
+}
+
+export interface SearchResult {
+    created: string;
+    modified: string;
+    id: string;
+    data: EntryData;
+    score: number;
+    relativeScore: number;
+}
+
+export interface SearchResults {
+    totalHits: number;
+    maxScore: number;
+    hits: SearchResult[];
 }

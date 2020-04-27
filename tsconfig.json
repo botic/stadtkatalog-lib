@@ -4,6 +4,7 @@
         "module": "commonjs",
         "moduleResolution": "Node",
         "forceConsistentCasingInFileNames": true,
+        "lib": ["ESNext.Array"],
         "newLine": "lf",
         "declaration": true,
         "pretty": true,
