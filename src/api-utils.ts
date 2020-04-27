@@ -16,23 +16,32 @@ export function getLinks(response: AxiosResponse): Links|null {
     return parseLinkHeader(response.headers["link"] || "");
 }
 
-export async function getPaginatedResults<T>(url: string, size=100): Promise<T[]|null> {
-    const results = [] as T[][];
-
-    try {
+export async function* getPaginatedResults<T>(url: string, size=100): AsyncIterable<T> {
         let hasNextLink = false,
             currentUrl = url;
 
         do {
-            const response = await client.get<T[]>(currentUrl, (!hasNextLink ? { params: { size } } : {}));
-            results.push(response.data);
+            let response;
+            try {
+                response = await client.get<T[]>(currentUrl, (!hasNextLink ? { params: { size } } : {}));
+            } catch (e) {
+                throw Error(`Could not read paginated result. ${e}`);
+            }
+
+            const { data } = response;
+            if (!Array.isArray(data)) {
+                throw Error("Invalid StadtKatalog API response. Must return an array!");
+            }
+
+            for (const item of data) {
+                yield item;
+            }
 
             const links = getLinks(response);
             if (links?.next) {
                 if (!links.next.size || !links.next.url) {
                     // this should never happen with the real API …
-                    console.error(`Invalid StadtKatalog API response for paginated result: ${url}`);
-                    return [];
+                    throw Error(`Invalid StadtKatalog API response for paginated result: ${url}`);
                 }
 
                 currentUrl = links.next.url;
@@ -41,9 +50,4 @@ export async function getPaginatedResults<T>(url: string, size=100): Promise<T[]
                 hasNextLink = false;
             }
         } while (hasNextLink);
-
-        return results.flat();
-    } catch (e) {
-        return null;
-    }
 }

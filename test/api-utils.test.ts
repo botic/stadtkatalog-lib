@@ -2,14 +2,16 @@ import {getPaginatedResults} from "../src/api-utils";
 import {Entry} from "../src/types";
 
 test("Get all paginated result", async () => {
-    const resultA = await getPaginatedResults<Entry>(
-        "/entry/100105/enclosures",
-        1
-    );
-    const resultB = await getPaginatedResults<Entry>(
-        "https://app.stadtkatalog.org/opendata/v1/entry/100105/enclosures",
-        1000
-    );
+    const resultA = [] as Entry[];
+    for await (const entry of getPaginatedResults<Entry>(`/entry/100105/enclosures`, 1)) {
+        resultA.push(entry);
+    }
+
+    const resultB = [] as Entry[];
+    for await (const entry of getPaginatedResults<Entry>(`/entry/100105/enclosures`, 100)) {
+        resultB.push(entry);
+    }
+
     expect(resultA).not.toBeNull();
     expect(resultB).not.toBeNull();
     expect(resultA?.length).toBeGreaterThan(1);

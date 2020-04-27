@@ -46,7 +46,11 @@ export async function getEntry(id: string, validAfter?: Date): Promise<Entry|nul
  */
 export async function getEntryEnclosures(id: string): Promise<Entry[]|null> {
     try {
-        return await getPaginatedResults<Entry>(`/entry/${id}/enclosures`);
+        const entries = [] as Entry[];
+        for await (const entry of getPaginatedResults<Entry>(`/entry/${id}/enclosures`)) {
+            entries.push(entry);
+        }
+        return entries;
     } catch (e) {
         return null;
     }
