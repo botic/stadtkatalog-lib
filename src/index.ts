@@ -1,4 +1,4 @@
-import {EntryData, Entry, SortField, SortOrder, GeoFencePoint, SearchResults} from "./types";
+import {EntryData, Entry, SortField, SortOrder, GeoFencePoint, SearchResults, DistanceUnit} from "./types";
 import {client, getPaginatedResults} from "./api-utils";
 
 /**
@@ -69,7 +69,7 @@ export async function searchFulltext(
     size=100,
     from=0,
     geoFence?: null|string|GeoFencePoint[],
-    validAfter?: Date
+    validAfter?: Date,
 ): Promise<SearchResults|null> {
     try {
         const params = {
@@ -84,6 +84,56 @@ export async function searchFulltext(
         };
 
         const response = await client.get<SearchResults>(`/search/fulltext`, { params });
+        return response.data;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Only searches around a given spot. Performs a full text queries over the following fields:
+ * name (most weighted), keywords, description.
+ * @param longitude center of the search circle
+ * @param latitude center of the search circle
+ * @param distance the radius of the search circle
+ * @param unit the unit of the given radius distance
+ * @param query query string
+ * @param sortField sorts the results by the given field. Note: fulltext queries cannot be sorted by `distance`.
+ * @param sortOrder order of the results
+ * @param size order of the results, upper limit is 1,000
+ * @param from the number of initial results that should be skipped
+ * @param geoFence optional; a named geo-fence string, an array of points, or null if no geofence should be used.
+ * @param validAfter optional; if set, only return the entry if it is valid after the given point in time
+ */
+export async function searchAround(
+    longitude: number,
+    latitude: number,
+    distance: number,
+    unit: DistanceUnit,
+    query?: string|null,
+    sortField=SortField.relevance,
+    sortOrder=SortOrder.desc,
+    size=100,
+    from=0,
+    geoFence?: null|string|GeoFencePoint[],
+    validAfter?: Date,
+): Promise<SearchResults|null> {
+    try {
+        const params = {
+            lnglat: `${longitude},${latitude}`,
+            distance,
+            unit,
+            sortField,
+            sortOrder,
+            size,
+            from,
+            ...typeof query === "string" && { q: query },
+            ...(geoFence !== null && typeof geoFence === "string") && { geoFenceName: geoFence },
+            ...(geoFence !== null && typeof geoFence === "object") && { geoFence: geoFence.map(p => `${p.longitude},${p.latitude}`).join(",") },
+            ...validAfter instanceof Date && { validAfter: validAfter.toISOString() },
+        };
+
+        const response = await client.get<SearchResults>(`/search/around`, { params });
         return response.data;
     } catch (e) {
         return null;

@@ -1,5 +1,5 @@
-import {searchFulltext} from "../src";
-import {GeoFencePoint, SortField, SortOrder} from "../src/types";
+import {searchAround, searchFulltext} from "../src";
+import {DistanceUnit, GeoFencePoint, SortField, SortOrder} from "../src/types";
 
 test("Run simple fulltext search fuzzy", async () => {
     const results = await searchFulltext("Seestern Aspern");
@@ -59,4 +59,19 @@ test("Run simple fulltext search with validAfter", async () => {
     expect(resultB).not.toBeNull();
     expect(resultB?.hits.some(hit => hit.id === "100105")).toBe(true);
     expect(resultA?.totalHits).toBe(resultB?.totalHits);
+});
+
+test("Run search around query", async () => {
+    const resultsNear = await searchAround(16.499546, 48.223615, 20, DistanceUnit.m);
+    expect(resultsNear).not.toBeNull();
+    expect(resultsNear?.hits.some(hit => hit.id === "100105")).toBe(true);
+    expect(resultsNear?.hits.some(hit => hit.id === "100108")).toBe(true);
+    expect(resultsNear?.hits.some(hit => hit.id === "100172")).toBe(false);
+
+    const resultsWide = await searchAround(16.499546, 48.223615, 75, DistanceUnit.m, null, SortField.id, SortOrder.desc, 1000);
+    expect(resultsWide).not.toBeNull();
+    expect(resultsWide?.hits.some(hit => hit.id === "100105")).toBe(true);
+    expect(resultsWide?.hits.some(hit => hit.id === "100108")).toBe(true);
+    expect(resultsWide?.hits.some(hit => hit.id === "100172")).toBe(true);
+    expect(resultsNear?.hits.some(hit => hit.id === "100109")).toBe(false);
 });

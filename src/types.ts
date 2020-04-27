@@ -161,3 +161,10 @@ export interface SearchResults {
     maxScore: number;
     hits: SearchResult[];
 }
+
+export enum DistanceUnit {
+    km = "km",
+    m = "m",
+    cm = "cm",
+    mm = "mm",
+}
