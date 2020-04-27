@@ -15,7 +15,6 @@
     "doc": "typedoc --out ./doc --theme markdown --hideSources --hideBreadcrumbs --includeVersion --readme none ./src",
     "prepare": "npm run build",
     "prepublishOnly": "npm run lint && npm test",
-    "precommit": "npm run lint && npm test",
     "prepush": "npm run lint && npm test && npm run doc"
   },
   "keywords": [

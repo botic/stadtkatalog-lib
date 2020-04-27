@@ -86,7 +86,12 @@ export interface EntryData {
     zvr:     string;
 }
 
+export interface TimeFrame {
+    [index: number]: string;
+}
+
 export interface Hours {
+    [index: string]: TimeFrame[];
 }
 
 export interface Promotion {
