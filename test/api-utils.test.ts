@@ -3,12 +3,12 @@ import {Entry} from "../src/types";
 
 test("Get all paginated result", async () => {
     const resultA = [] as Entry[];
-    for await (const entry of getPaginatedResults<Entry>(`/entry/100105/enclosures`, 1)) {
+    for await (const entry of getPaginatedResults<Entry>(`/entry/100105/enclosures`, { size: 1 })) {
         resultA.push(entry);
     }
 
     const resultB = [] as Entry[];
-    for await (const entry of getPaginatedResults<Entry>(`/entry/100105/enclosures`, 100)) {
+    for await (const entry of getPaginatedResults<Entry>(`/entry/100105/enclosures`, { size: 100 })) {
         resultB.push(entry);
     }
 

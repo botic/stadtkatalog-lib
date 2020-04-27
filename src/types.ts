@@ -168,3 +168,19 @@ export enum DistanceUnit {
     cm = "cm",
     mm = "mm",
 }
+
+export interface PaginationParams {
+    size?: number;
+    from?: number;
+    sortField?: SortField;
+    sortOrder?: SortOrder;
+    geoFence?: null|string|GeoFencePoint[];
+    validAfter?: Date;
+}
+
+export interface ExportEntry extends EntryData {
+    _id: string;
+    _created: string;
+    _modified: string;
+    _assets?: Asset[];
+}

@@ -1,4 +1,4 @@
-import {EntryData, Entry, SortField, SortOrder, GeoFencePoint, SearchResults, DistanceUnit} from "./types";
+import {EntryData, Entry, SortField, SortOrder, GeoFencePoint, SearchResults, DistanceUnit, ExportEntry} from "./types";
 import {client, getPaginatedResults} from "./api-utils";
 
 /**
@@ -42,12 +42,13 @@ export async function getEntry(id: string, validAfter?: Date): Promise<Entry|nul
 /**
  * Gets all enclosed entries for the given entry.
  * @param id the parent entry's id
+ * @param size size of the result pages for pagination
  * @see https://docs.stadtkatalog.org/opendata-rest-api/#entry-enclosures
  */
-export async function getEntryEnclosures(id: string): Promise<Entry[]|null> {
+export async function getEntryEnclosures(id: string, size=100): Promise<Entry[]|null> {
     try {
         const entries = [] as Entry[];
-        for await (const entry of getPaginatedResults<Entry>(`/entry/${id}/enclosures`)) {
+        for await (const entry of getPaginatedResults<Entry>(`/entry/${id}/enclosures`, { size })) {
             entries.push(entry);
         }
         return entries;
@@ -142,4 +143,30 @@ export async function searchAround(
     } catch (e) {
         return null;
     }
+}
+
+/**
+ * Exports the full StadtKatalog entries.
+ * @param includeAssets
+ * @param size
+ * @param geoFence
+ * @param validAfter
+ */
+export async function exportEntries(
+    includeAssets=false,
+    size=100,
+    geoFence?: null|string|GeoFencePoint[],
+    validAfter?: Date,
+): Promise<ExportEntry[]> {
+    const paginationParams = {
+        size,
+        geoFence,
+        validAfter,
+    };
+    const entryBuffer = [] as ExportEntry[];
+    for await (const entry of getPaginatedResults<ExportEntry>(`/export/json`, paginationParams, { includeAssets })) {
+        entryBuffer.push(entry);
+    }
+
+    return entryBuffer;
 }
