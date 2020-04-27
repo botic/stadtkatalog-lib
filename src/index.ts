@@ -1,5 +1,17 @@
-import {EntryData, Entry, SortField, SortOrder, GeoFencePoint, SearchResults, DistanceUnit, ExportEntry} from "./types";
-import {client, getPaginatedResults} from "./api-utils";
+import {
+    EntryData,
+    Entry,
+    SortField,
+    SortOrder,
+    GeoFencePoint,
+    SearchResults,
+    DistanceUnit,
+    ExportEntry
+} from "./types";
+import {
+    client,
+    getPaginatedResults
+} from "./api-utils";
 
 /**
  * Retrieves a entry's data by its ID. No metadata will be included.
@@ -66,6 +78,7 @@ export async function getEntryEnclosures(id: string, size=100): Promise<Entry[]|
  * @param from the number of initial results that should be skipped
  * @param geoFence optional; a named geo-fence string, an array of points, or null if no geofence should be used.
  * @param validAfter optional; if set, only return the entry if it is valid after the given point in time
+ * @see https://docs.stadtkatalog.org/opendata-rest-api/#search-api
  */
 export async function searchFulltext(
     query: string,
@@ -109,6 +122,7 @@ export async function searchFulltext(
  * @param from the number of initial results that should be skipped
  * @param geoFence optional; a named geo-fence string, an array of points, or null if no geofence should be used.
  * @param validAfter optional; if set, only return the entry if it is valid after the given point in time
+ * @see https://docs.stadtkatalog.org/opendata-rest-api/#location-based-query
  */
 export async function searchAround(
     longitude: number,
@@ -151,6 +165,7 @@ export async function searchAround(
  * @param size
  * @param geoFence
  * @param validAfter
+ * @see https://docs.stadtkatalog.org/opendata-rest-api/#export-api
  */
 export async function exportEntries(
     includeAssets=false,
