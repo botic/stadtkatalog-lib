@@ -3,13 +3,20 @@
   "version": "0.1.0",
   "description": "The Stadtkatalog.org library for Node.",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint -c .eslintrc.js --ext .ts ./lib"
+    "test-coverage": "jest --collectCoverage",
+    "lint": "eslint -c .eslintrc.js --ext .ts ./src",
+    "doc": "typedoc --out ./doc --theme markdown --hideSources --hideBreadcrumbs --includeVersion --readme none ./src",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint && npm test",
+    "precommit": "npm run lint && npm test",
+    "prepush": "npm run lint && npm test && npm run doc"
   },
   "keywords": [
     "stadtkatalog"
@@ -23,8 +30,11 @@
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",
+    "husky": "^4.2.5",
     "jest": "^25.4.0",
     "ts-jest": "^25.4.0",
+    "typedoc": "^0.17.6",
+    "typedoc-plugin-markdown": "^2.2.17",
     "typescript": "^3.8.3"
   },
   "dependencies": {

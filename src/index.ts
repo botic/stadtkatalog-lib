@@ -1,3 +1,7 @@
+/**
+ * `stadtkatalog-lib` is the standard JavaScript library to access the StadtKatalog Open Data REST API.
+ */
+
 import {
     EntryData,
     Entry,
