@@ -3,46 +3,11 @@
 
 ## Index
 
-### Variables
-
-* [client](_api_utils_.md#const-client)
-
 ### Functions
 
-* [getLinks](_api_utils_.md#getlinks)
 * [getPaginatedResults](_api_utils_.md#getpaginatedresults)
 
-## Variables
-
-### `Const` client
-
-• **client**: *AxiosInstance* = axios.create({
-    baseURL: process.env.STADTKATALOG_ENDPOINT || "https://app.stadtkatalog.org/opendata/v1",
-    timeout: Number(process.env.STADTKATALOG_TIMEOUT) || 15000,
-    responseType: "json",
-    headers: {
-        "Accept": "application/json",
-        "User-Agent": "StadtKatalog Client",
-    }
-})
-
 ## Functions
-
-###  getLinks
-
-▸ **getLinks**(`response`: AxiosResponse): *Links | null*
-
-Parses the HTTP Link header to detect a paginated response.
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`response` | AxiosResponse |   |
-
-**Returns:** *Links | null*
-
-___
 
 ###  getPaginatedResults
 
