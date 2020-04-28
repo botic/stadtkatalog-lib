@@ -3,9 +3,12 @@ import * as parseLinkHeader from "parse-link-header";
 import {Links} from "parse-link-header";
 import {PaginationParams} from "./types";
 
+/**
+ * @ignore
+ */
 export const client = axios.create({
-    baseURL: process.env.STADTKATALOG_ENDPOINT || "https://app.stadtkatalog.org/opendata/v1",
-    timeout: Number(process.env.STADTKATALOG_TIMEOUT) || 15000,
+    baseURL: process?.env?.STADTKATALOG_ENDPOINT || "https://app.stadtkatalog.org/opendata/v1",
+    timeout: Number(process?.env?.STADTKATALOG_CLIENT_TIMEOUT) || 60000,
     responseType: "json",
     headers: {
         "Accept": "application/json",
@@ -16,6 +19,7 @@ export const client = axios.create({
 /**
  * Parses the HTTP Link header to detect a paginated response.
  * @param response
+ * @ignore
  */
 export function getLinks(response: AxiosResponse): Links|null {
     return parseLinkHeader(response.headers["link"] || "");

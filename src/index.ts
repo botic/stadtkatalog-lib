@@ -1,5 +1,5 @@
 /**
- * `stadtkatalog-lib` is the standard JavaScript library to access the StadtKatalog Open Data REST API.
+ * Standard JavaScript client library to access the StadtKatalog Open Data REST API.
  */
 
 import {
