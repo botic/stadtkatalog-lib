@@ -86,12 +86,16 @@ export interface EntryData {
     zvr:     string;
 }
 
-export interface TimeFrame {
-    [index: number]: string;
-}
-
 export interface Hours {
-    [index: string]: TimeFrame[];
+    "mon"?: string[];
+    "tue"?: string[];
+    "wed"?: string[];
+    "thu"?: string[];
+    "fri"?: string[];
+    "sat"?: string[];
+    "sun"?: string[];
+    "hol"?: string[];
+    [propName: string]: string[] | undefined;
 }
 
 export interface Promotion {
