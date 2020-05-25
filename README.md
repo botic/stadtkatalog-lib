@@ -73,6 +73,11 @@ plugins: [
 ]
 ```
 
+## Compatibility
+
+This library has been compiled from TypeScript to JavaScript with the `ES5` target.
+You still need to provide polyfills for e.g. `Promise` and `Symbol`.
+
 ## License
 
 ISC – StadtKatalog.org / Philipp Naderer-Puiu

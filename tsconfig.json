@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es2018",
+        "target": "ES5",
+        "downlevelIteration": true,
         "module": "commonjs",
         "moduleResolution": "Node",
         "forceConsistentCasingInFileNames": true,
